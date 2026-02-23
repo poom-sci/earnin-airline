@@ -30,3 +30,27 @@ class TestCreateBookingIntegration:
         assert "customer_id" in response_data
         assert response_data["customer_id"] >= 1
         
+
+
+class TestCreateBookingMismatchName:
+    
+    def test_create_booking_with_mismatched_customer_name(self, override_db):
+        flight_id = "AAA01"
+        
+        booking_request = {
+            "passport_id": "BC1500",
+            "first_name": "John",
+            "last_name": "Doe",
+        }
+        
+        client = TestClient(app)
+        response = client.post(
+            f"/flights/{flight_id}/passengers",
+            json=booking_request,
+        )
+        
+        assert response.status_code == 400
+        
+        response_data = response.json()
+        assert "Firstname or Lastname is mismatch" in response_data["detail"]
+        
