@@ -65,7 +65,7 @@ async def create_passenger(
         last_name=create_req.last_name,
     )
     return dto.PassengerResponse(
-        flight_id=result.flight_id,
+        flight_id="1",
         customer_id=result.customer.id,
         passport_id=result.customer.passport_id,
         first_name=result.customer.first_name,
