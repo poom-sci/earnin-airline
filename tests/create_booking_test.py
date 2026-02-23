@@ -8,6 +8,7 @@ class TestCreateBooking:
     def test_create_booking_with_valid_customer_and_flight_details(self, client, override_db):
         response = create_passenger(client, TEST_FLIGHT_ID, "BC1500", "Shauna", "Davila")
         
+        # expect success
         assert response.status_code == 200
         data = response.json()
         assert data["flight_id"] == TEST_FLIGHT_ID
@@ -19,6 +20,7 @@ class TestCreateBooking:
     def test_create_booking_with_mismatched_customer_name(self, client, override_db):
         response = create_passenger(client, TEST_FLIGHT_ID, "BC1500", "John", "Doe")
         
+        # expect 400 error due to name mismatch
         assert response.status_code == 400
         assert "Firstname or Lastname is mismatch" in response.json()["detail"]
         

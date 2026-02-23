@@ -8,6 +8,12 @@ docker compose up -d
 docker compose exec -it postgres bash -c "/home/scripts/exec_sql.sh schema.sql"
 ```
 
+or using makefile
+
+```bash
+make compose-up
+```
+
 2. Install test packages:
 ```bash
 pip install -r requirements.txt
@@ -21,6 +27,16 @@ pytest
 or run specific test file:
 ```bash
 pytest tests/create_booking_test.py
+```
+
+or run with log:
+```bash
+pytest tests/create_booking_test.py -s
+```
+
+or run with specfic class:
+```bash
+pytest tests/create_booking_test.py::TestCreateBookingIntegration -s
 ```
 
 ## GitHub Actions

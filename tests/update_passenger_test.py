@@ -22,6 +22,7 @@ class TestUpdatePassenger:
             "last_name": "Doe"
         })
         
+        # expect success
         assert update_resp.status_code == 200
         data = update_resp.json()
         assert data["customer_id"] == customer_id
@@ -39,6 +40,7 @@ class TestUpdatePassenger:
             "last_name": "Name"
         })
         
+        # expect 400 error due to name mismatch
         assert update_resp.status_code == 400
         assert "Firstname or Lastname is mismatch" in update_resp.json()["detail"]
         
