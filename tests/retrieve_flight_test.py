@@ -18,6 +18,7 @@ class TestRetrieveFlight:
         client = TestClient(app)
         response = client.get("/flights")
         
+        # expect success
         assert response.status_code == 200
         
         flights = response.json()["flights"]
@@ -30,6 +31,7 @@ class TestRetrieveFlight:
         departure_time = lhr_flight["departure_time"]
         arrival_time = lhr_flight["arrival_time"]
         
+        # expect flight details with correct timezone conversion
         assert departure_time == "2024-12-15T10:00:00Z"
         assert arrival_time == "2024-12-16T01:00:00+07:00"
         
@@ -57,5 +59,6 @@ class TestRetrieveFlight:
         departure_time = bkk_flight["departure_time"]
         arrival_time = bkk_flight["arrival_time"]
         
+        # expect flight details with same timezone
         assert departure_time == "2024-12-20T15:00:00+07:00"
         assert arrival_time == "2024-12-20T17:30:00+07:00"

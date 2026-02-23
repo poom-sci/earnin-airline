@@ -1,35 +1,19 @@
 import pytest
-from fastapi.testclient import TestClient
+from tests.conftest import create_passenger
 
-from earnin_airline.app import app
+TEST_FLIGHT_ID = "AAA01"
 
 class TestDeletePassenger:
     
-    def test_delete_valid_booking(self, override_db):
-        flight_id = "AAA01"
+    def test_delete_valid_booking(self, client, override_db):
+        create_resp = create_passenger(client, TEST_FLIGHT_ID, "BC1500", "Shauna", "Davila")
+        customer_id = create_resp.json()["customer_id"]
         
-        booking_request = {
-            "passport_id": "BC1500",
-            "first_name": "Shauna",
-            "last_name": "Davila",
-        }
+        delete_resp = client.delete(f"/flights/{TEST_FLIGHT_ID}/passengers/{customer_id}")
+        # expect success
+        assert delete_resp.status_code == 200
         
-        client = TestClient(app)
-        create_response = client.post(
-            f"/flights/{flight_id}/passengers",
-            json=booking_request,
-        )
-        
-        assert create_response.status_code == 200
-        customer_id = create_response.json()["customer_id"]
-        
-        delete_response = client.delete(
-            f"/flights/{flight_id}/passengers/{customer_id}"
-        )
-        
-        assert delete_response.status_code == 200
-        
-        list_response = client.get(f"/flights/{flight_id}/passengers")
-        passengers = list_response.json()["passengers"]
-        
+        list_resp = client.get(f"/flights/{TEST_FLIGHT_ID}/passengers")
+        passengers = list_resp.json()["passengers"]
+        # expect no passengers after deletion
         assert len(passengers) == 0
