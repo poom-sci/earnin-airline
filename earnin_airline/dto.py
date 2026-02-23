@@ -16,6 +16,7 @@ class PassengerResponse(BaseModel):
     passport_id: str
     first_name: str
     last_name: str
+    
 
 
 class ListPassengerResponse(BaseModel):
