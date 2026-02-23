@@ -22,6 +22,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Setup database
+      run: |
+        PGPASSWORD=postgres psql -h localhost -U postgres -d airline -f db/schema.sql
+    
     - name: Start Wiremock
       run: |
         docker run -d --name wiremock -p 8081:8080 wiremock/wiremock:3.9.1
