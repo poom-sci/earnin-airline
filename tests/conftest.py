@@ -1,8 +1,10 @@
 import os
 import pytest
 from sqlalchemy import text
+from fastapi.testclient import TestClient
 
 from earnin_airline.db import DB
+from earnin_airline.app import app
 
 test_db = DB()
 
@@ -11,6 +13,11 @@ def override_db():
     import earnin_airline.db as db_module
     db_module.db = test_db
     return test_db
+
+
+@pytest.fixture(scope="function")
+def client():
+    return TestClient(app)
 
 
 @pytest.fixture(autouse=True)
@@ -30,3 +37,11 @@ def setup_and_cleanup_db():
         session.execute(text("DELETE FROM customers"))
         session.execute(text("DELETE FROM flights"))
         session.commit()
+
+
+def create_passenger(client, flight_id, passport_id, first_name, last_name):
+    response = client.post(
+        f"/flights/{flight_id}/passengers",
+        json={"passport_id": passport_id, "first_name": first_name, "last_name": last_name},
+    )
+    return response
