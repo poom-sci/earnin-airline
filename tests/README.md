@@ -1,3 +1,7 @@
+# Integration Tests
+
+## How to run
+
 1. Start docker first:
 ```bash
 docker compose up -d
@@ -18,3 +22,12 @@ or run specific test file:
 ```bash
 pytest tests/create_booking_test.py
 ```
+
+## GitHub Actions
+
+Tests run automatically on every PR to main branch. Check the "Actions" tab to see results.
+
+## Notes
+
+- Make sure docker is running before test
+- Test data will be cleaned up automatically
